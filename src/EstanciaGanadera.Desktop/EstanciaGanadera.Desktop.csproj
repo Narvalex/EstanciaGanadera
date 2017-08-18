@@ -51,12 +51,22 @@
     <Compile Include="Views\Dashboard\DashboardMainView.Designer.cs">
       <DependentUpon>DashboardMainView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dashboard\DashboardMainViewPresenter.cs" />
     <Compile Include="Views\Dashboard\IDashboardMainView.cs" />
     <Compile Include="Views\Establecimientos\EstablecimientoMainView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\Establecimientos\EstablecimientoMainView.Designer.cs">
       <DependentUpon>EstablecimientoMainView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Establecimientos\EstablecimientosMainViewPresenter.cs" />
+    <Compile Include="Views\Establecimientos\IEstablecimientosMainView.cs" />
+    <Compile Include="Views\Establecimientos\Views\INuevoEstablecimientoForm.cs" />
+    <Compile Include="Views\Establecimientos\Views\NuevoEstablecimientoForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Establecimientos\Views\NuevoEstablecimientoForm.Designer.cs">
+      <DependentUpon>NuevoEstablecimientoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Main\IMainFormView.cs" />
     <Compile Include="Views\Main\MainForm.cs">
@@ -79,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Establecimientos\EstablecimientoMainView.resx">
       <DependentUpon>EstablecimientoMainView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Establecimientos\Views\NuevoEstablecimientoForm.resx">
+      <DependentUpon>NuevoEstablecimientoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Main\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -107,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libs\Eventing.Core-v1.0.0\Eventing.Core.csproj">
+      <Project>{D8A3116A-5C51-4A6F-B364-512948E5A792}</Project>
+      <Name>Eventing.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

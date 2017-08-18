@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace EstanciaGanadera.Desktop.Views.Dashboard
 {
@@ -7,6 +8,10 @@ namespace EstanciaGanadera.Desktop.Views.Dashboard
         public DashboardMainView()
         {
             InitializeComponent();
+
+            this.linkEstablecimientos.Click += (s, e) => this.EstablecimientosClicked?.Invoke(s, e);
         }
+
+        public event EventHandler EstablecimientosClicked;
     }
 }

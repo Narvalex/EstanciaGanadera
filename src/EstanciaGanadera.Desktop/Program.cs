@@ -1,4 +1,6 @@
 ﻿using EstanciaGanadera.Desktop.Views.Dashboard;
+using EstanciaGanadera.Desktop.Views.Establecimientos;
+using EstanciaGanadera.Desktop.Views.Establecimientos.Views;
 using EstanciaGanadera.Desktop.Views.Main;
 using System;
 using System.Threading;
@@ -20,9 +22,18 @@ namespace EstanciaGanadera.Desktop
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Views----------------------------------------------------------------------------------------------
+            // Establecimientos
+            var nuevoEstablecimientoForm = new NuevoEstablecimientoForm();
+            var establecimientosMainView = new EstablecimientoMainView(nuevoEstablecimientoForm);
+
             var dashboardMainView = new DashboardMainView();
-            var mainForm = new MainForm(dashboardMainView);
-            var presenter = new MainFormPresenter(mainForm);
+            var mainForm = new MainForm(dashboardMainView, establecimientosMainView);
+
+            // Presenters-------------------------------------------------------------------------------------------
+            var mainFormPresenter = new MainFormPresenter(mainForm, dashboardMainView);
+            var establecimientosMainViewPresenter = new EstablecimientosMainViewPresenter(establecimientosMainView);
+
             Application.Run(mainForm);
         }
 

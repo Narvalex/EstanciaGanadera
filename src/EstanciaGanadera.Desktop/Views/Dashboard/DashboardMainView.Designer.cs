@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label1 = new System.Windows.Forms.Label();
+            this.linkEstablecimientos = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -43,19 +43,20 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.label1);
+            this.splitContainer1.Panel2.Controls.Add(this.linkEstablecimientos);
             this.splitContainer1.Size = new System.Drawing.Size(487, 336);
-            this.splitContainer1.SplitterDistance = 162;
+            this.splitContainer1.SplitterDistance = 169;
             this.splitContainer1.TabIndex = 0;
             // 
-            // label1
+            // linkLabel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(55, 57);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(163, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Bienvenido a Estancia Ganadera";
+            this.linkEstablecimientos.AutoSize = true;
+            this.linkEstablecimientos.Location = new System.Drawing.Point(3, 14);
+            this.linkEstablecimientos.Name = "linkLabel1";
+            this.linkEstablecimientos.Size = new System.Drawing.Size(86, 13);
+            this.linkEstablecimientos.TabIndex = 1;
+            this.linkEstablecimientos.TabStop = true;
+            this.linkEstablecimientos.Text = "Establecimientos";
             // 
             // DashboardMainView
             // 
@@ -75,6 +76,6 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel linkEstablecimientos;
     }
 }
