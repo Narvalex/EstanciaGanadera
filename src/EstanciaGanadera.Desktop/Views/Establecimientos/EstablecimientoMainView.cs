@@ -22,11 +22,11 @@ namespace EstanciaGanadera.Desktop.Views.Establecimientos
             {
                 //this.NuevoEstablecimiento?.Invoke(s, e);
                 // It should explode if nobody is listening to tihs event
-                this.NuevoEstablecimiento.Invoke(s, e);
+                this.IrANuevoEstablecimiento.Invoke(s, e);
             };
         }
 
-        public event EventHandler NuevoEstablecimiento;
+        public event EventHandler IrANuevoEstablecimiento;
 
         public void MostrarNuevoEstablecimientoForm()
         {

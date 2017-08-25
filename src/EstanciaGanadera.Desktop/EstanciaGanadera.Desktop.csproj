@@ -31,9 +31,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DropDb|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DropDb</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.3\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrap.cs" />
     <Compile Include="Views\Dashboard\DashboardMainView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -62,6 +87,7 @@
     <Compile Include="Views\Establecimientos\EstablecimientosMainViewPresenter.cs" />
     <Compile Include="Views\Establecimientos\IEstablecimientosMainView.cs" />
     <Compile Include="Views\Establecimientos\Views\INuevoEstablecimientoForm.cs" />
+    <Compile Include="Views\Establecimientos\Views\NuevoEstablecimientoPresenter.cs" />
     <Compile Include="Views\Establecimientos\Views\NuevoEstablecimientoForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -108,6 +134,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -122,10 +149,33 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EstanciaGanadera.Client\EstanciaGanadera.Client.csproj">
+      <Project>{F652C6C1-16FA-4242-AA5C-7677B6E7C798}</Project>
+      <Name>EstanciaGanadera.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\libs\Eventing.Core-v1.0.0\Eventing.Core.csproj">
       <Project>{D8A3116A-5C51-4A6F-B364-512948E5A792}</Project>
       <Name>Eventing.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\libs\Eventing.HttpClient-v1.0.0\Eventing.HttpClient.csproj">
+      <Project>{FD80989B-08E7-446A-B967-670BAEB4BD5F}</Project>
+      <Name>Eventing.HttpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\Eventing.OfflineClient-v1.0.0\Eventing.OfflineClient.csproj">
+      <Project>{27FED56B-B9BB-475D-8CBA-A97691AB34AD}</Project>
+      <Name>Eventing.OfflineClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\Eventing.OfflineClient.EntityFramework-v1.0.0\Eventing.OfflineClient.EntityFramework.csproj">
+      <Project>{3BEDBB6C-E215-4B22-AD43-E442C65F56E4}</Project>
+      <Name>Eventing.OfflineClient.EntityFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

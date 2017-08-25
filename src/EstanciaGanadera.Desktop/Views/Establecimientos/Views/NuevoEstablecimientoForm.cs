@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace EstanciaGanadera.Desktop.Views.Establecimientos.Views
 {
@@ -7,6 +8,15 @@ namespace EstanciaGanadera.Desktop.Views.Establecimientos.Views
         public NuevoEstablecimientoForm()
         {
             InitializeComponent();
+
+            this.btnRegistrar.Click += (s, e) => this.RegistrarNuevoEstablecimiento(s, this.textBox.Text);
         }
+
+        public void DefaultFocus()
+        {
+            this.textBox.Focus();
+        }
+
+        public event EventHandler<string> RegistrarNuevoEstablecimiento;
     }
 }

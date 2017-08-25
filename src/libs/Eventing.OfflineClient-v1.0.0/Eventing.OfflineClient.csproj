@@ -29,6 +29,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DropDb|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DropDb\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -40,14 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMessageOutbox.cs" />
+    <Compile Include="IOfflineClient.cs" />
+    <Compile Include="OfflineClientBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queues\IDurablePendingMessageQueue.cs" />
     <Compile Include="Queues\InMemoryPendingMessagesQueue.cs" />
     <Compile Include="Queues\IPendingMessagesQueue.cs" />
-    <Compile Include="MessageOutbox.cs" />
-    <Compile Include="OutboxSendResult.cs" />
     <Compile Include="Queues\PendingMessage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendResult.cs" />
+    <Compile Include="SendStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Eventing.Core-v1.0.0\Eventing.Core.csproj">

@@ -29,6 +29,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DropDb|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DropDb\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -40,14 +49,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Establecimientos\EstablecimientoClient.cs" />
+    <Compile Include="Establecimientos\EstablecimientosClient.cs" />
+    <Compile Include="Establecimientos\IEstablecimientosClient.cs" />
+    <Compile Include="Establecimientos\EstablecimientosQueryClient.cs" />
+    <Compile Include="Establecimientos\IEstablecimientosQueryClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EstanciaGanadera.Common\EstanciaGanadera.Common.csproj">
+      <Project>{F46BDA9F-46A5-4CDA-AF9A-6F7B94484993}</Project>
+      <Name>EstanciaGanadera.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EstanciaGanadera.Domain\EstanciaGanadera.Domain.csproj">
+      <Project>{0C3325E2-62AD-49DD-9C97-A113412FAF3F}</Project>
+      <Name>EstanciaGanadera.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\Eventing.Core-v1.0.0\Eventing.Core.csproj">
+      <Project>{d8a3116a-5c51-4a6f-b364-512948e5a792}</Project>
+      <Name>Eventing.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\libs\Eventing.HttpClient-v1.0.0\Eventing.HttpClient.csproj">
       <Project>{fd80989b-08e7-446a-b967-670baeb4bd5f}</Project>
       <Name>Eventing.HttpClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\Eventing.OfflineClient-v1.0.0\Eventing.OfflineClient.csproj">
+      <Project>{27fed56b-b9bb-475d-8cba-a97691ab34ad}</Project>
+      <Name>Eventing.OfflineClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

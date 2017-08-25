@@ -4,7 +4,7 @@ namespace EstanciaGanadera.Desktop.Views.Establecimientos
 {
     public interface IEstablecimientosMainView
     {
-        event EventHandler NuevoEstablecimiento;
+        event EventHandler IrANuevoEstablecimiento;
 
         void MostrarNuevoEstablecimientoForm();
     }

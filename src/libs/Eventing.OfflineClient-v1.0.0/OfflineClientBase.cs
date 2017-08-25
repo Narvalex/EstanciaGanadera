@@ -2,6 +2,7 @@
 using Eventing.Core.Serialization;
 using Eventing.Log;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,18 +11,19 @@ namespace Eventing.OfflineClient
     /// <summary>
     /// Message outbox. The recipient must be idempotent of all messages sent wint this.
     /// </summary>
-    public class MessageOutbox : IMessageOutbox, IDisposable
+    public class OfflineClientBase : IOfflineClient, IDisposable
     {
-        private readonly ILogLite log = LogManager.GetLoggerFor<MessageOutbox>();
+        private readonly string prefix;
+        private readonly ILogLite log = LogManager.GetLoggerFor<OfflineClientBase>();
         private readonly IHttpLite http;
-        private readonly Func<string> tokenProvider;
+        private Func<string> tokenProvider;
         private readonly IJsonSerializer serializer;
         private readonly IPendingMessagesQueue queue;
         private bool disposed = false;
         private readonly Task thread;
 
-        public MessageOutbox(IHttpLite httpClient, IJsonSerializer serializer, IPendingMessagesQueue queue,
-            Func<string> tokenProvider = null)
+        public OfflineClientBase(IHttpLite httpClient, IJsonSerializer serializer, IPendingMessagesQueue queue,
+            Func<string> tokenProvider = null, string prefix = "")
         {
             Ensure.NotNull(httpClient, nameof(httpClient));
             Ensure.NotNull(serializer, nameof(serializer));
@@ -31,35 +33,48 @@ namespace Eventing.OfflineClient
             this.serializer = serializer;
             this.queue = queue;
             this.tokenProvider = tokenProvider is null ? () => null : tokenProvider;
+            this.prefix = prefix != string.Empty ? prefix + "/" : string.Empty;
 
             this.thread = Task.Factory.StartNew(this.SendPendingMessages, TaskCreationOptions.LongRunning);
         }
 
-        public async Task<OutboxSendStatus> Send<T>(string uri, T message)
+        public async Task<SendStatus> Send<T>(string uri, T message)
         {
+            uri = this.BuildUri(uri);
             try
             {
                 await this.http.Post<T>(uri, message, this.tokenProvider.Invoke());
-                return OutboxSendStatus.Sent;
+                return SendStatus.Sent;
             }
-            catch (ServiceUnavailableException)
+            catch (Exception ex)
             {
-                this.Enqueue<T>(uri, message);
-                return OutboxSendStatus.Enqueued;
+                if (ex is ServiceUnavailableException || ex is HttpRequestException)
+                {
+                    this.Enqueue<T>(uri, message);
+                    return SendStatus.Enqueued;
+                }
+
+                throw;
             }
         }
 
-        public async Task<IOutboxSendResult<TResult>> Send<TContent, TResult>(string uri, TContent message)
+        public async Task<SendResult<TResult>> Send<TContent, TResult>(string uri, TContent message)
         {
+            uri = this.BuildUri(uri);
             try
             {
                 var result = await this.http.Post<TContent, TResult>(uri, message, this.tokenProvider.Invoke());
-                return new OutboxSendResult<TResult>(OutboxSendStatus.Sent, result);
+                return new SendResult<TResult>(SendStatus.Sent, result);
             }
-            catch (ServiceUnavailableException)
+            catch (Exception ex)
             {
-                this.Enqueue<TContent>(uri, message);
-                return new OutboxSendResult<TResult>(OutboxSendStatus.Enqueued, default(TResult));
+                if (ex is ServiceUnavailableException || ex is HttpRequestException)
+                {
+                    this.Enqueue<TContent>(uri, message);
+                    return new SendResult<TResult>(SendStatus.Enqueued, default(TResult));
+                }
+
+                throw;
             }
         }
 
@@ -109,6 +124,17 @@ namespace Eventing.OfflineClient
                     this.EnterIdle(TimeSpan.FromSeconds(seconds));
                 }
             }
+        }
+
+        public void SetupTokenProvider(Func<string> tokenProvider)
+        {
+            // On the fly
+            this.tokenProvider = tokenProvider;
+        }
+
+        private string BuildUri(string uri)
+        {
+            return this.prefix + uri;
         }
 
         private void EnterIdle() => this.EnterIdle(TimeSpan.FromMilliseconds(100));

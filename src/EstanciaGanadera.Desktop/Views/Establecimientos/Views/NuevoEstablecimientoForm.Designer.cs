@@ -28,25 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox = new System.Windows.Forms.TextBox();
+            this.btnRegistrar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // label2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Nuevo establecimiento form";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(140, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Nombre del establecimiento:";
+            // 
+            // textBox1
+            // 
+            this.textBox.Location = new System.Drawing.Point(6, 23);
+            this.textBox.Name = "textBox1";
+            this.textBox.Size = new System.Drawing.Size(137, 20);
+            this.textBox.TabIndex = 2;
+            // 
+            // button1
+            // 
+            this.btnRegistrar.Location = new System.Drawing.Point(68, 49);
+            this.btnRegistrar.Name = "button1";
+            this.btnRegistrar.Size = new System.Drawing.Size(75, 23);
+            this.btnRegistrar.TabIndex = 3;
+            this.btnRegistrar.Text = "Registrar";
+            this.btnRegistrar.UseVisualStyleBackColor = true;
             // 
             // NuevoEstablecimientoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnRegistrar);
+            this.Controls.Add(this.textBox);
+            this.Controls.Add(this.label2);
             this.Name = "NuevoEstablecimientoForm";
-            this.Size = new System.Drawing.Size(228, 165);
+            this.Size = new System.Drawing.Size(156, 83);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -54,6 +74,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox;
+        private System.Windows.Forms.Button btnRegistrar;
     }
 }
