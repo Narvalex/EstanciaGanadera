@@ -31,12 +31,13 @@ namespace EstanciaGanadera.Desktop
 #endif
 
             // Usuarios-------------------------------------------------------------------------------
-            Func<string> tokenProvider = null;
+            Func<string> tokenProvider = () => "Test";
+            var jsonSerializer = new NewtonsoftJsonSerializer();
 
             // Establecimientos------------------------------------------------------------------------
             // Clients
             //var establecimientoClient = new FakeEstablecimientosClient();
-            var establecimientoClient = new EstablecimientosClient(http, serializer, queue, tokenProvider);
+            var establecimientoClient = new EstablecimientosClient(http, serializer, queue, tokenProvider, ex => MessageBox.Show(jsonSerializer.Serialize(ex), "Error en buzón salida de mensajes pendientes"));
             // Views
             var nuevoEstablecimientoForm = new NuevoEstablecimientoForm();
             var establecimientosMainView = new EstablecimientoMainView(nuevoEstablecimientoForm);

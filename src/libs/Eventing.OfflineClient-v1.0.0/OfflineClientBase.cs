@@ -17,23 +17,28 @@ namespace Eventing.OfflineClient
         private readonly ILogLite log = LogManager.GetLoggerFor<OfflineClientBase>();
         private readonly IHttpLite http;
         private Func<string> tokenProvider;
+        private Action<Exception> onPendingError;
         private readonly IJsonSerializer serializer;
         private readonly IPendingMessagesQueue queue;
         private bool disposed = false;
         private readonly Task thread;
+        private readonly int idleMilliseconds;
 
         public OfflineClientBase(IHttpLite httpClient, IJsonSerializer serializer, IPendingMessagesQueue queue,
-            Func<string> tokenProvider = null, string prefix = "")
+            Func<string> tokenProvider = null, string prefix = "", Action<Exception> onPendingError = null, int idleMilliseconds = 1000)
         {
             Ensure.NotNull(httpClient, nameof(httpClient));
             Ensure.NotNull(serializer, nameof(serializer));
             Ensure.NotNull(queue, nameof(queue));
+            Ensure.Positive(idleMilliseconds, nameof(idleMilliseconds));
 
             this.http = httpClient;
             this.serializer = serializer;
             this.queue = queue;
             this.tokenProvider = tokenProvider is null ? () => null : tokenProvider;
+            this.onPendingError = onPendingError is null ? ex => { } : onPendingError;
             this.prefix = prefix != string.Empty ? prefix + "/" : string.Empty;
+            this.idleMilliseconds = idleMilliseconds;
 
             this.thread = Task.Factory.StartNew(this.SendPendingMessages, TaskCreationOptions.LongRunning);
         }
@@ -99,7 +104,7 @@ namespace Eventing.OfflineClient
                     }
                     catch (AggregateException ex)
                     {
-                        if (ex.InnerException is ServiceUnavailableException)
+                        if (ex.InnerException is ServiceUnavailableException || ex.InnerException is HttpRequestException)
                         {
                             this.EnterIdle();
                             continue;
@@ -119,9 +124,9 @@ namespace Eventing.OfflineClient
 
                 void enterError(Exception ex)
                 {
-                    var seconds = 30;
-                    this.log.Error(ex, $"An error ocurred while trying to send pending message. Retry in {seconds} seconds...");
-                    this.EnterIdle(TimeSpan.FromSeconds(seconds));
+                    this.log.Error(ex, $"An error ocurred while trying to send pending message. The client will continue to send messages...");
+                    this.onPendingError(ex);
+                    this.queue.Dequeue();
                 }
             }
         }
@@ -137,11 +142,10 @@ namespace Eventing.OfflineClient
             return this.prefix + uri;
         }
 
-        private void EnterIdle() => this.EnterIdle(TimeSpan.FromMilliseconds(100));
-        private void EnterIdle(TimeSpan timeSpan)
+        private void EnterIdle()
         {
             if (this.disposed) return;
-            Thread.Sleep(timeSpan);
+            Thread.Sleep(this.idleMilliseconds);
         }
 
         public void Dispose()

@@ -10,8 +10,8 @@ namespace EstanciaGanadera.Client.Establecimientos
 {
     public class EstablecimientosClient : OfflineClientBase, IEstablecimientosClient
     {
-        public EstablecimientosClient(IHttpLite httpClient, IJsonSerializer serializer, IPendingMessagesQueue queue, Func<string> tokenProvider = null)
-            : base(httpClient, serializer, queue, tokenProvider, Endpoints.Establecimientos.Prefix)
+        public EstablecimientosClient(IHttpLite httpClient, IJsonSerializer serializer, IPendingMessagesQueue queue, Func<string> tokenProvider, Action<Exception> onError)
+            : base(httpClient, serializer, queue, tokenProvider, Endpoints.Establecimientos.Prefix, onError)
         { }
 
         public async Task RegistrarNuevoEstablecimiento(string nombreDeEstablecimiento)
